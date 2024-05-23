@@ -2,10 +2,14 @@ package com.compose.samples.replicas.jetsnack.ui.components
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -41,6 +45,7 @@ import com.compose.samples.replicas.jetsnack.model.Snack
 import com.compose.samples.replicas.jetsnack.model.SnackCollection
 import com.compose.samples.replicas.jetsnack.model.SnackRepo
 import com.compose.samples.replicas.jetsnack.R
+import com.compose.samples.replicas.jetsnack.model.snacks
 import com.compose.samples.replicas.jetsnack.ui.theme.JetsnackTheme
 import com.compose.samples.replicas.jetsnack.ui.utils.OnSnackClick
 
@@ -205,7 +210,71 @@ fun HighlightSnackItem(
     scrollProvider: () -> Float,
     modifier: Modifier = Modifier
 ) {
+    JetsnackCard(
+        modifier = modifier
+            .size(
+                width = HighlightCardWidth,
+                height = 250.dp
+            )
+            .padding(bottom = 16.dp)
+    ) {
+        Column(
+            modifier = Modifier
+                .clickable { onSnackClick(snack.id) }
+                .fillMaxSize()
+        ) {
+            Box(
+                modifier = Modifier
+                    .height(160.dp)
+                    .fillMaxWidth()
+            ) {
+                Box(
+                    modifier = Modifier
+                        .height(100.dp)
+                        .fillMaxWidth()
+                        .offsetGradientBackground(
+                            colors = gradient,
+                            width = {
+                                6 * cardWidthWithPaddingPx
+                            },
+                            offset = {
+                                val left = index * cardWidthWithPaddingPx
+                                val gradientOffset = left - (scrollProvider() / 3f)
+                                gradientOffset
+                            }
+                        )
+                )
 
+                SnackImage(
+                    imageUrl = snack.imageUrl,
+                    contentDescription = null,
+                    modifier = Modifier
+                        .size(120.dp)
+                        .align(Alignment.BottomCenter)
+                )
+            }
+
+            Spacer(modifier = Modifier.height(8.dp))
+
+            Text(
+                text = snack.name,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
+                style = MaterialTheme.typography.h6,
+                color = JetsnackTheme.colors.textSecondary,
+                modifier = Modifier.padding(horizontal = 16.dp)
+            )
+
+            Spacer(modifier = Modifier.height(8.dp))
+
+            Text(
+                text = snack.tagline,
+                style = MaterialTheme.typography.body1,
+                color = JetsnackTheme.colors.textHelp,
+                modifier = Modifier.padding(horizontal = 16.dp)
+            )
+        }
+    }
 }
 
 @Composable
@@ -235,6 +304,27 @@ fun SnackImage(
 }
 
 @Preview(showSystemUi = true)
+@Composable
+fun HighlightSnackItemPreview() {
+    JetsnackTheme {
+        val snackCollection = SnackRepo.getSnacks()[1]
+
+        Column(
+            modifier = Modifier
+                .padding(32.dp),
+        ) {
+            HighlightSnackItem(
+                snack = snacks.first(),
+                onSnackClick = {},
+                index = 0,
+                gradient = JetsnackTheme.colors.gradient6_1,
+                scrollProvider = { 0f }
+            )
+        }
+    }
+}
+
+//@Preview(showSystemUi = true)
 @Composable
 fun SnackCollectionPreview() {
     JetsnackTheme {
