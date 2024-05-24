@@ -45,19 +45,19 @@ private val searchCategoryCollections = listOf(
         categories = listOf(
             SearchCategory(
                 name = "Chips & crackers",
-                imageUrl = "http://10.0.2.2:5000/search/UsSdMZ78Q3E"
+                imageUrl = "$CDN_SERVER_URL/search/UsSdMZ78Q3E"
             ),
             SearchCategory(
                 name = "Fruit snacks",
-                imageUrl = "http://10.0.2.2:5000/search/SfP1PtM9Qa8"
+                imageUrl = "$CDN_SERVER_URL/search/SfP1PtM9Qa8"
             ),
             SearchCategory(
                 name = "Desserts",
-                imageUrl = "http://10.0.2.2:5000/search/_jk8KIyN_uA"
+                imageUrl = "$CDN_SERVER_URL/search/_jk8KIyN_uA"
             ),
             SearchCategory(
                 name = "Nuts ",
-                imageUrl = "http://10.0.2.2:5000/search/UsSdMZ78Q3E"
+                imageUrl = "$CDN_SERVER_URL/search/UsSdMZ78Q3E"
             )
         )
     ),
@@ -67,27 +67,27 @@ private val searchCategoryCollections = listOf(
         categories = listOf(
             SearchCategory(
                 name = "Organic",
-                imageUrl = "http://10.0.2.2:5000/search/7meCnGCJ5Ms"
+                imageUrl = "$CDN_SERVER_URL/search/7meCnGCJ5Ms"
             ),
             SearchCategory(
                 name = "Gluten Free",
-                imageUrl = "http://10.0.2.2:5000/search/m741tj4Cz7M"
+                imageUrl = "$CDN_SERVER_URL/search/m741tj4Cz7M"
             ),
             SearchCategory(
                 name = "Paleo",
-                imageUrl = "http://10.0.2.2:5000/search/dt5-8tThZKg"
+                imageUrl = "$CDN_SERVER_URL/search/dt5-8tThZKg"
             ),
             SearchCategory(
                 name = "Vegan",
-                imageUrl = "http://10.0.2.2:5000/search/ReXxkS1m1H0"
+                imageUrl = "$CDN_SERVER_URL/search/ReXxkS1m1H0"
             ),
             SearchCategory(
                 name = "Vegetarian",
-                imageUrl = "http://10.0.2.2:5000/search/IGfIGP5ONV0"
+                imageUrl = "$CDN_SERVER_URL/search/IGfIGP5ONV0"
             ),
             SearchCategory(
                 name = "Whole30",
-                imageUrl = "http://10.0.2.2:5000/search/9MzCd76xLGk"
+                imageUrl = "$CDN_SERVER_URL/search/9MzCd76xLGk"
             )
         )
     )

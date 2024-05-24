@@ -19,7 +19,7 @@ fun JetsnackNavHost() {
     ) {
         navigation(
             route = Routes.Home.route,
-            startDestination = HomeSections.CART.route
+            startDestination = HomeSections.FEED.route
         ) {
             addHomeGraph(
                 onSnackSelected = jetsnackNavController::navigateToSnackDetail,
