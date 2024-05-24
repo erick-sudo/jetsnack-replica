@@ -307,7 +307,6 @@ fun SnackImage(
 @Composable
 fun HighlightSnackItemPreview() {
     JetsnackTheme {
-        val snackCollection = SnackRepo.getSnacks()[1]
 
         Column(
             modifier = Modifier

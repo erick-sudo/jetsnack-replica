@@ -1,6 +1,8 @@
 package com.compose.samples.replicas.jetsnack.ui.home
 
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.Spring
+import androidx.compose.animation.core.spring
 import androidx.compose.animation.expandVertically
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -133,7 +135,7 @@ private fun SnackCollectionList(
         enter = slideInVertically() + expandVertically(
             expandFrom = Alignment.Top
         ) + fadeIn(initialAlpha = 0.3f),
-        exit = slideOutVertically() + shrinkVertically() + fadeOut()
+        exit = slideOutVertically(animationSpec = spring(stiffness = Spring.StiffnessLow, dampingRatio = 0.3f)) + shrinkVertically() + fadeOut()
     ) {
         FilterScreen(
             onDismiss = { filtersVisible = false }

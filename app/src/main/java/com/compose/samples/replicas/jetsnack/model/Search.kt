@@ -45,19 +45,19 @@ private val searchCategoryCollections = listOf(
         categories = listOf(
             SearchCategory(
                 name = "Chips & crackers",
-                imageUrl = "https://source.unsplash.com/UsSdMZ78Q3E"
+                imageUrl = "http://10.0.2.2:5000/search/UsSdMZ78Q3E"
             ),
             SearchCategory(
                 name = "Fruit snacks",
-                imageUrl = "https://source.unsplash.com/SfP1PtM9Qa8"
+                imageUrl = "http://10.0.2.2:5000/search/SfP1PtM9Qa8"
             ),
             SearchCategory(
                 name = "Desserts",
-                imageUrl = "https://source.unsplash.com/_jk8KIyN_uA"
+                imageUrl = "http://10.0.2.2:5000/search/_jk8KIyN_uA"
             ),
             SearchCategory(
                 name = "Nuts ",
-                imageUrl = "https://source.unsplash.com/UsSdMZ78Q3E"
+                imageUrl = "http://10.0.2.2:5000/search/UsSdMZ78Q3E"
             )
         )
     ),
@@ -67,27 +67,27 @@ private val searchCategoryCollections = listOf(
         categories = listOf(
             SearchCategory(
                 name = "Organic",
-                imageUrl = "https://source.unsplash.com/7meCnGCJ5Ms"
+                imageUrl = "http://10.0.2.2:5000/search/7meCnGCJ5Ms"
             ),
             SearchCategory(
                 name = "Gluten Free",
-                imageUrl = "https://source.unsplash.com/m741tj4Cz7M"
+                imageUrl = "http://10.0.2.2:5000/search/m741tj4Cz7M"
             ),
             SearchCategory(
                 name = "Paleo",
-                imageUrl = "https://source.unsplash.com/dt5-8tThZKg"
+                imageUrl = "http://10.0.2.2:5000/search/dt5-8tThZKg"
             ),
             SearchCategory(
                 name = "Vegan",
-                imageUrl = "https://source.unsplash.com/ReXxkS1m1H0"
+                imageUrl = "http://10.0.2.2:5000/search/ReXxkS1m1H0"
             ),
             SearchCategory(
-                name = "Vegitarian",
-                imageUrl = "https://source.unsplash.com/IGfIGP5ONV0"
+                name = "Vegetarian",
+                imageUrl = "http://10.0.2.2:5000/search/IGfIGP5ONV0"
             ),
             SearchCategory(
                 name = "Whole30",
-                imageUrl = "https://source.unsplash.com/9MzCd76xLGk"
+                imageUrl = "http://10.0.2.2:5000/search/9MzCd76xLGk"
             )
         )
     )

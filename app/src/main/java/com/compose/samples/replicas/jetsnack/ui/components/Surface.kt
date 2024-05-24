@@ -8,6 +8,7 @@ import androidx.compose.material.LocalContentColor
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
@@ -38,6 +39,7 @@ fun JetsnackSurface(
                 color = getBackgroundColorForElevation(color = color, elevation = elevation),
                 shape = shape
             )
+            .clip(shape)
     ) {
         CompositionLocalProvider(
             LocalContentColor provides contentColor,
