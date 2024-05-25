@@ -18,16 +18,17 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.Icon
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.AccountCircle
 import androidx.compose.material.icons.outlined.Home
 import androidx.compose.material.icons.outlined.Search
 import androidx.compose.material.icons.outlined.ShoppingCart
-import androidx.compose.material.Icon
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -56,6 +57,7 @@ import androidx.navigation.compose.composable
 import com.compose.samples.replicas.jetsnack.R
 import com.compose.samples.replicas.jetsnack.ui.components.JetsnackSurface
 import com.compose.samples.replicas.jetsnack.ui.home.cart.Cart
+import com.compose.samples.replicas.jetsnack.ui.home.cart.CartViewModel
 import com.compose.samples.replicas.jetsnack.ui.home.search.Search
 import com.compose.samples.replicas.jetsnack.ui.theme.JetsnackTheme
 import com.compose.samples.replicas.jetsnack.ui.utils.OnNavigateToRoute
@@ -63,8 +65,12 @@ import com.compose.samples.replicas.jetsnack.ui.utils.OnSnackSelected
 import java.util.Locale
 
 fun NavGraphBuilder.addHomeGraph(
+    viewModel: CartViewModel,
     onSnackSelected: OnSnackSelected,
     onNavigateToRoute: OnNavigateToRoute,
+    removeSnack: (Long) -> Unit,
+    increaseItemCount: (Long) -> Unit,
+    decreaseItemCount: (Long) -> Unit,
     modifier: Modifier = Modifier
 ) {
     composable(HomeSections.FEED.route) { from ->
@@ -87,11 +93,15 @@ fun NavGraphBuilder.addHomeGraph(
     }
     composable(HomeSections.CART.route) { from ->
         Cart(
+            orderLines = viewModel.orderLines.collectAsState().value,
+            shippingDestination = viewModel.shippingDestination.collectAsState().value,
             onSnackClick = { id ->
                 onSnackSelected(id, from)
             },
-            onNavigateToRoute,
-            modifier
+            onNavigateToRoute = onNavigateToRoute,
+            increaseItemCount = increaseItemCount,
+            decreaseItemCount = decreaseItemCount,
+            removeSnack = removeSnack
         )
     }
     composable(HomeSections.PROFILE.route) {

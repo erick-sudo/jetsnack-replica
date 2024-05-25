@@ -10,12 +10,13 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.Delete
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -41,7 +42,7 @@ fun QuantitySelector(
             )
         }
         JetsnackGradientTintedIconButton(
-            imageVector = Icons.Default.Delete,
+            imageVector = ImageVector.vectorResource(R.drawable.baseline_remove_24),
             onClick = decreaseItemCount,
             contentDescription = stringResource(R.string.label_decrease),
             modifier = Modifier.align(Alignment.CenterVertically)

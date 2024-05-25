@@ -29,7 +29,7 @@ class JetsnackNavController(
 ) {
 
     // Navigation state source of truth
-    val currentRoute: String?
+    private val currentRoute: String?
         get() = navController.currentDestination?.route
 
     fun upPress() {
@@ -51,7 +51,7 @@ class JetsnackNavController(
     fun navigateToSnackDetail(snackId: Long, from: NavBackStackEntry) {
         // In order to discard duplicated navigation events, we check the Lifecycle
         if (from.lifecycleIsResumed()) {
-            navController.navigate("${Routes.SnackDetail}/$snackId")
+            navController.navigate("${Routes.SnackDetail.route}/$snackId")
         }
     }
 }

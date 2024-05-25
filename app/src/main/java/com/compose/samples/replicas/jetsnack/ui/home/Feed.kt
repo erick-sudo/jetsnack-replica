@@ -54,7 +54,6 @@ fun Feed(
         SnackRepo.getFilters()
     }
 
-
     JetsnackScaffold(
         bottomBar = {
             JetsnackBottomBar(
@@ -65,7 +64,8 @@ fun Feed(
         },
         modifier = modifier
     ) { paddingValues ->
-        Feed(snackCollections,
+        Feed(
+            snackCollections,
             filters,
             onSnackClick,
             Modifier.padding(paddingValues)

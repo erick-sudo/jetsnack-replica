@@ -1,7 +1,19 @@
 package com.compose.samples.replicas.jetsnack.ui.home.cart
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.Crossfade
+import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.spring
+import androidx.compose.animation.expandHorizontally
+import androidx.compose.animation.expandVertically
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.shrinkHorizontally
+import androidx.compose.animation.slideInHorizontally
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -37,15 +49,16 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.layout.LastBaseline
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.layout.LastBaseline
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
@@ -54,10 +67,9 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ChainStyle
 import androidx.constraintlayout.compose.ConstraintLayout
-import androidx.lifecycle.viewmodel.compose.viewModel
-
 import com.compose.samples.replicas.jetsnack.R
 import com.compose.samples.replicas.jetsnack.model.OrderLine
+import com.compose.samples.replicas.jetsnack.model.ShippingDestination
 import com.compose.samples.replicas.jetsnack.model.SnackCollection
 import com.compose.samples.replicas.jetsnack.model.SnackRepo
 import com.compose.samples.replicas.jetsnack.ui.components.JetsnackButton
@@ -72,6 +84,8 @@ import com.compose.samples.replicas.jetsnack.ui.components.rememberJetsnackScaff
 import com.compose.samples.replicas.jetsnack.ui.home.DestinationBar
 import com.compose.samples.replicas.jetsnack.ui.home.HomeSections
 import com.compose.samples.replicas.jetsnack.ui.home.JetsnackBottomBar
+import com.compose.samples.replicas.jetsnack.ui.home.ShippingDestinationItem
+import com.compose.samples.replicas.jetsnack.ui.home.ShippingDestinationScreen
 import com.compose.samples.replicas.jetsnack.ui.theme.AlphaNearOpaque
 import com.compose.samples.replicas.jetsnack.ui.theme.JetsnackTheme
 import com.compose.samples.replicas.jetsnack.ui.utils.OnNavigateToRoute
@@ -80,59 +94,87 @@ import com.compose.samples.replicas.jetsnack.ui.utils.formatPrice
 
 @Composable
 fun Cart(
+    orderLines: List<OrderLine>,
+    shippingDestination: ShippingDestination?,
     onSnackClick: OnSnackClick,
     onNavigateToRoute: OnNavigateToRoute,
+    increaseItemCount: (Long) -> Unit,
+    decreaseItemCount: (Long) -> Unit,
+    removeSnack: (Long) -> Unit,
     modifier: Modifier = Modifier,
-    viewModel: CartViewModel = viewModel(factory = CartViewModel.provideFactory())
 ) {
-    val orderLines by viewModel.orderLines.collectAsState()
     val inspiredByCart by remember {
         mutableStateOf(SnackRepo.getInspiredByCart())
     }
     val jetsnackScaffoldState = rememberJetsnackScaffoldState()
+    var shippingScreenVisible by rememberSaveable {
+        mutableStateOf(false)
+    }
 
-    JetsnackScaffold(
-        bottomBar = {
-            JetsnackBottomBar(
-                tabs = HomeSections.entries.toTypedArray(),
-                currentRoute = HomeSections.CART.route,
-                navigateToRoute = onNavigateToRoute
+    Box {
+        JetsnackScaffold(
+            bottomBar = {
+                JetsnackBottomBar(
+                    tabs = HomeSections.entries.toTypedArray(),
+                    currentRoute = HomeSections.CART.route,
+                    navigateToRoute = onNavigateToRoute
+                )
+            },
+            snackbarHost = { snackbarHostState ->
+                SnackbarHost(
+                    hostState = snackbarHostState,
+                    modifier = Modifier
+                        .systemBarsPadding(),
+                    snackbar = { snackbarData ->
+                        JetsnackSnackbar(snackbarData)
+                    }
+                )
+            },
+            scaffoldState = jetsnackScaffoldState.scaffoldState,
+            modifier = modifier
+        ) { paddingValues ->
+            Cart(
+                orderLines = orderLines,
+                shippingDestination = shippingDestination,
+                removeSnack = removeSnack,
+                increaseItemCount = increaseItemCount,
+                decreaseItemCount = decreaseItemCount,
+                inspiredByCart = inspiredByCart,
+                onSnackClick = onSnackClick,
+                onShowShippingAddressScreen = { shippingScreenVisible = true },
+                modifier = Modifier.padding(paddingValues),
             )
-        },
-        snackbarHost = { snackbarHostState ->
-            SnackbarHost(
-                hostState = snackbarHostState,
-                modifier = Modifier
-                    .systemBarsPadding(),
-                snackbar = { snackbarData ->
-                    JetsnackSnackbar(snackbarData)
-                }
+        }
+
+        AnimatedVisibility(
+            visible = shippingScreenVisible,
+            enter = slideInHorizontally() + expandHorizontally(
+                expandFrom = Alignment.End
+            ) + fadeIn(initialAlpha = 0f),
+            exit = slideOutHorizontally(
+                animationSpec = spring(stiffness = Spring.StiffnessLow, dampingRatio = 0.4f)
+            ) + shrinkHorizontally()
+                    + fadeOut()
+        ) {
+            ShippingDestinationScreen(
+                onDismiss = { shippingScreenVisible = false },
+                onShippingDestination = {}
             )
-        },
-        scaffoldState = jetsnackScaffoldState.scaffoldState,
-        modifier = modifier
-    ) { paddingValues ->
-        Cart(
-            orderLines = orderLines,
-            removeSnack = viewModel::removeSnack,
-            increaseItemCount = viewModel::increaseSnackCount,
-            decreaseItemCount = viewModel::decreaseSnackCount,
-            inspiredByCart = inspiredByCart,
-            onSnackClick = onSnackClick,
-            modifier = Modifier.padding(paddingValues)
-        )
+        }
     }
 }
 
 @Composable
 private fun Cart(
     orderLines: List<OrderLine>,
+    shippingDestination: ShippingDestination?,
     removeSnack: (Long) -> Unit,
     increaseItemCount: (Long) -> Unit,
     decreaseItemCount: (Long) -> Unit,
     inspiredByCart: SnackCollection,
     onSnackClick: OnSnackClick,
-    modifier: Modifier = Modifier
+    onShowShippingAddressScreen: () -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     JetsnackSurface(modifier = modifier.fillMaxSize()) {
         Box {
@@ -143,6 +185,8 @@ private fun Cart(
                 decreaseItemCount = decreaseItemCount,
                 inspiredByCart = inspiredByCart,
                 onSnackClick = onSnackClick,
+                shippingDestination = shippingDestination,
+                onShowShippingAddressScreen = onShowShippingAddressScreen,
                 modifier = Modifier.align(Alignment.TopCenter)
             )
 
@@ -161,6 +205,8 @@ private fun CartContent(
     decreaseItemCount: (Long) -> Unit,
     inspiredByCart: SnackCollection,
     onSnackClick: (Long) -> Unit,
+    shippingDestination: ShippingDestination?,
+    onShowShippingAddressScreen: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     val resources = LocalContext.current.resources
@@ -289,6 +335,14 @@ private fun CartContent(
         }
 
         item {
+            SelectedShippingDestination(
+                shippingDestination = shippingDestination,
+                onShowShippingAddressScreen = onShowShippingAddressScreen,
+                modifier = Modifier
+            )
+        }
+
+        item {
             SummaryItem(
                 subtotal = orderLines.sumOf { it.snack.price * it.count },
                 shippingCosts = 369
@@ -317,7 +371,7 @@ fun CartItem(
 ) {
     val snack = orderLine.snack
     ConstraintLayout(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .clickable { onSnackClick(snack.id) }
             .background(JetsnackTheme.colors.uiBackground)
@@ -422,6 +476,55 @@ fun CartItem(
                 top.linkTo(parent.bottom)
             }
         )
+    }
+}
+
+@Composable
+fun SelectedShippingDestination(
+    shippingDestination: ShippingDestination?,
+    onShowShippingAddressScreen: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    Column(modifier) {
+        Text(
+            text = stringResource(R.string.cart_destination_header),
+            style = MaterialTheme.typography.h6,
+            color = JetsnackTheme.colors.brand,
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis,
+            modifier = Modifier
+                .padding(horizontal = 24.dp)
+                .heightIn(min = 56.dp)
+                .wrapContentHeight()
+        )
+
+        Crossfade(
+            targetState = shippingDestination == null,
+            label = ""
+        ) { showShippingDestination ->
+            when(showShippingDestination) {
+                true -> JetsnackButton(
+                    modifier = Modifier
+                        .padding(
+                            start = 24.dp,
+                            end = 24.dp,
+                            top = 4.dp,
+                            bottom = 24.dp
+                        ),
+                    onClick = onShowShippingAddressScreen
+                ) {
+                    Text(text = "Select Shipping Address")
+                }
+
+                else -> ShippingDestinationItem(
+                    shippingDestination = shippingDestination!!
+                ) {
+
+                }
+            }
+        }
+
+        JetsnackDivider()
     }
 }
 
