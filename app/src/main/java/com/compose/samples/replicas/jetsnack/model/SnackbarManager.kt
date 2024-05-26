@@ -16,7 +16,9 @@ data class Message(
  * Manages snackbar messages to show on the screen
  */
 object SnackbarManager {
+
     private val _messages: MutableStateFlow<List<Message>> = MutableStateFlow(emptyList())
+
     val messages: StateFlow<List<Message>>
         get() = _messages.asStateFlow()
 

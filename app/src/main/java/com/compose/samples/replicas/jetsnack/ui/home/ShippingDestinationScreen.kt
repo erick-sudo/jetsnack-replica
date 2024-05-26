@@ -94,6 +94,8 @@ fun ShippingDestinationScreen(
                         onShippingDestination = onShippingDestination,
                         clickable = true
                     )
+
+                    JetsnackDivider()
                 }
             }
         }

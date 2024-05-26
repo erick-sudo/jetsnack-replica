@@ -35,7 +35,6 @@ import androidx.compose.runtime.key
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -63,11 +62,11 @@ import com.compose.samples.replicas.jetsnack.ui.components.JetsnackSurface
 import com.compose.samples.replicas.jetsnack.ui.components.QuantitySelector
 import com.compose.samples.replicas.jetsnack.ui.components.SnackCollection
 import com.compose.samples.replicas.jetsnack.ui.components.SnackImage
+import com.compose.samples.replicas.jetsnack.ui.components.rememberJetsnackScaffoldState
 import com.compose.samples.replicas.jetsnack.ui.theme.JetsnackTheme
 import com.compose.samples.replicas.jetsnack.ui.theme.Neutral8
 import com.compose.samples.replicas.jetsnack.ui.utils.OnSnackClick
 import com.compose.samples.replicas.jetsnack.ui.utils.formatPrice
-import kotlinx.coroutines.launch
 import kotlin.math.max
 import kotlin.math.min
 
@@ -89,6 +88,7 @@ fun SnackDetail(
     onSnackClick: OnSnackClick,
     addToCart: (snackId: Long, qty: Int) -> Unit,
 ) {
+    val jetsnackScaffoldState = rememberJetsnackScaffoldState()
     JetsnackScaffold(
         snackbarHost = { snackbarHostState ->
             SnackbarHost(
@@ -100,6 +100,7 @@ fun SnackDetail(
                 }
             )
         },
+        scaffoldState = jetsnackScaffoldState.scaffoldState
     ) {
         Box(Modifier.fillMaxSize()) {
 
