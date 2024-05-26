@@ -81,6 +81,10 @@ class CartViewModel(
         return shippingDestination.value?.let { ShippingRepo.computeShippingFee(_orderLines.value, it) } ?: 0f
     }
 
+    suspend fun onShippingAddress(shippingDestination: ShippingDestination) {
+        _shippingDestination.value = shippingDestination
+    }
+
     companion object {
         fun provideFactory(
             snackbarManager: SnackbarManager = SnackbarManager,

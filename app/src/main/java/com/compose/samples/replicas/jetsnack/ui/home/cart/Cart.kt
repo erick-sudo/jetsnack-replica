@@ -96,6 +96,7 @@ import com.compose.samples.replicas.jetsnack.ui.utils.formatPrice
 fun Cart(
     orderLines: List<OrderLine>,
     shippingDestination: ShippingDestination?,
+    onShippingAddress: (ShippingDestination) -> Unit,
     onSnackClick: OnSnackClick,
     onNavigateToRoute: OnNavigateToRoute,
     increaseItemCount: (Long) -> Unit,
@@ -158,7 +159,10 @@ fun Cart(
         ) {
             ShippingDestinationScreen(
                 onDismiss = { shippingScreenVisible = false },
-                onShippingDestination = {}
+                onShippingDestination = {
+                    onShippingAddress(it)
+                    shippingScreenVisible = false
+                }
             )
         }
     }
@@ -498,30 +502,24 @@ fun SelectedShippingDestination(
                 .wrapContentHeight()
         )
 
-        Crossfade(
-            targetState = shippingDestination == null,
-            label = ""
-        ) { showShippingDestination ->
-            when(showShippingDestination) {
-                true -> JetsnackButton(
-                    modifier = Modifier
-                        .padding(
-                            start = 24.dp,
-                            end = 24.dp,
-                            top = 4.dp,
-                            bottom = 24.dp
-                        ),
-                    onClick = onShowShippingAddressScreen
-                ) {
-                    Text(text = "Select Shipping Address")
-                }
+        if(shippingDestination != null) {
+            ShippingDestinationItem(
+                shippingDestination = shippingDestination,
+                onShippingDestination = {}
+            )
+        }
 
-                else -> ShippingDestinationItem(
-                    shippingDestination = shippingDestination!!
-                ) {
-
-                }
-            }
+        JetsnackButton(
+            modifier = Modifier
+                .padding(
+                    start = 24.dp,
+                    end = 24.dp,
+                    top = 4.dp,
+                    bottom = 24.dp
+                ),
+            onClick = onShowShippingAddressScreen
+        ) {
+            Text(text = if(shippingDestination == null) "Select Shipping Address" else "Change Shipping Address")
         }
 
         JetsnackDivider()

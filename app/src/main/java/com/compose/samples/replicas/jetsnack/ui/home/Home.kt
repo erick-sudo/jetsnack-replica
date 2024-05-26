@@ -32,6 +32,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -62,6 +63,7 @@ import com.compose.samples.replicas.jetsnack.ui.home.search.Search
 import com.compose.samples.replicas.jetsnack.ui.theme.JetsnackTheme
 import com.compose.samples.replicas.jetsnack.ui.utils.OnNavigateToRoute
 import com.compose.samples.replicas.jetsnack.ui.utils.OnSnackSelected
+import kotlinx.coroutines.launch
 import java.util.Locale
 
 fun NavGraphBuilder.addHomeGraph(
@@ -92,9 +94,17 @@ fun NavGraphBuilder.addHomeGraph(
         )
     }
     composable(HomeSections.CART.route) { from ->
+
+        val coroutineScope = rememberCoroutineScope()
+
         Cart(
             orderLines = viewModel.orderLines.collectAsState().value,
             shippingDestination = viewModel.shippingDestination.collectAsState().value,
+            onShippingAddress = { newShippingAddress ->
+                coroutineScope.launch {
+                    viewModel.onShippingAddress(newShippingAddress)
+                }
+            },
             onSnackClick = { id ->
                 onSnackSelected(id, from)
             },

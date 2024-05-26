@@ -15,7 +15,7 @@ data class Snack(
 /**
  * Static data
  */
-const val EVN = "Dev"
+const val EVN = "Prod"
 val CDN_SERVER_URL
     get() = if(EVN == "Prod") "http://192.168.1.102:5000" else "http://10.0.2.2:5000"
 
